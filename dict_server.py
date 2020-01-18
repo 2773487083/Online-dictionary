@@ -1,4 +1,7 @@
 """
+author : bjq
+email : 2773487083@qq.com
+env : python3.6
 dict 服务端
 """
 import sys

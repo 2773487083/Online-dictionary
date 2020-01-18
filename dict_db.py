@@ -1,3 +1,10 @@
+"""
+author : bjq
+email : 2773487083@qq.com
+env : python3.6
+dict 数据处理
+"""
+
 import pymysql
 
 

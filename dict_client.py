@@ -1,3 +1,9 @@
+"""
+author : bjq
+email : 2773487083@qq.com
+env : python3.6
+dict 客户端
+"""
 from socket import *
 from getpass import getpass
 import hashlib

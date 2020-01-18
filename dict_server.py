@@ -37,24 +37,34 @@ def do_login(connfd, name, passwd):
 # 处理查询单词请求
 def check_word(connfd, name, word):
     db.insert_history(name, word)
-    mean = db.find(name, word)
+    mean = db.find(word)
     if mean:
         connfd.send(mean[0].encode())
     else:
         connfd.send("没有该单词".encode())
 
 
-def history():
-    mean = db.find(name, word)
-    if mean:
-        connfd.send(mean[0].encode())
+# 处理查询历史记录请求
+def history(connfd, name):
+    data = db.history(name)
+    if data:
+        connfd.send("OK".encode())
+        time.sleep(0.1)
+        for i in data:
+            msg = "%-20s %s" % (i[0], i[1])
+            connfd.send(msg.encode())
+            time.sleep(0.1)
+        connfd.send(b"##")
     else:
-        connfd.send("没有该单词".encode())
+        connfd.send("FAIL".encode())
 
 
 def handle(connfd, addr):
     while True:
-        request = connfd.recv(1024).decode()
+        try:
+            request = connfd.recv(1024).decode()
+        except ConnectionResetError:
+            continue
         tmp = request.split()
         if not request or tmp[0] == "E":
             print(addr, "退出了")
@@ -66,6 +76,8 @@ def handle(connfd, addr):
             do_login(connfd, tmp[1], tmp[2])
         elif tmp[0] == "C":
             check_word(connfd, tmp[1], tmp[2])
+        elif tmp[0] == "H":
+            history(connfd, tmp[1])
 
 
 def main():

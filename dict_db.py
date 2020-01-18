@@ -64,11 +64,13 @@ class Database:
 
     # 查询历史记录
     def history(self, name):
-        sql = "select word,time from hist where name=%s"
+        sql = "select word,time from hist where name=%s order by time desc limit 10"
         self.cur.execute(sql, [name])
-
+        return self.cur.fetchall()
 
 
 if __name__ == '__main__':
     db = Database("dict")
-    print(db.find("bjq"))
+    data = db.history("bjq")
+    for i in data:
+        print("%s %s" % (i[0], i[1]))

@@ -66,9 +66,16 @@ def check_word(name):
 def history(name):
     msg = "H %s" % name
     sockfd.send(msg.encode())  # 发送请求
-    data = sockfd.recv(1024).decode()  # 接收反馈
-    print(data)
-
+    data = sockfd.recv(1024).decode()  # 是否有历史记录
+    if data == "OK":
+        while True:
+            data = sockfd.recv(1024).decode()
+            if data == "##":
+                break
+            print(data)
+            # data = data.split(" ",1)
+    else:
+        print("没有历史记录")
 
 
 # 二级界面
